@@ -174,7 +174,6 @@ socialLinks.forEach((link, i) => {
 - `/` - Focus on first social link
 - `Escape` - Remove focus from current element
 - `Enter/Space` - Activate buttons and links
-```
 
 ## 📝 Code Quality
 
