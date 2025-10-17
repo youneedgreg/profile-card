@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Profile card component with semantic HTML">
+    <title>Profile Card</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main>
+        <!-- Profile Card Container -->
+        <article data-testid="test-profile-card">
+            
+            <!-- Header Section with Name -->
+            <header>
+                <h1 data-testid="test-user-name">Gregory Odete</h1>
+            </header>
+
+            <!-- Avatar Section -->
+            <figure>
+                <img 
+                    data-testid="test-user-avatar" 
+                    src="https://via.placeholder.com/200" 
+                    alt="Profile picture of Gregory Odete"
+                >
+                <figcaption>Profile Picture</figcaption>
+            </figure>
+
+            <!-- Biography Section -->
+            <section>
+                <h2>About Me</h2>
+                <p data-testid="test-user-bio">
+                    This is my biography. I'm a software engineer passionate about creating accessible and user-friendly interfaces.
+                </p>
+            </section>
+
+            <!-- Time Display Section -->
+            <section>
+                <h2>Current Time</h2>
+                <time data-testid="test-user-time" datetime="">
+                    <!-- Time in milliseconds will be inserted here by JavaScript -->
+                </time>
+            </section>
+
+            <!-- Social Links Navigation -->
+            <nav data-testid="test-user-social-links" aria-label="Social media links">
+                <h2>Connect with Me</h2>
+                <ul>
+                    <li>
+                        <a 
+                            data-testid="test-user-social-twitter" 
+                            href="https://twitter.com/youneedgreg" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            Twitter
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                            data-testid="test-user-social-github" 
+                            href="https://github.com/youneedgreg" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                            data-testid="test-user-social-linkedin" 
+                            href="https://linkedin.com/in/youneedgreg" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            LinkedIn
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                            data-testid="test-user-social-instagram" 
+                            href="https://instagram.com/youneedgreg" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            Instagram
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Hobbies Section -->
+            <section>
+                <h2>My Hobbies</h2>
+                <ul data-testid="test-user-hobbies">
+                    <li>Programming</li>
+                    <li>Reading</li>
+                    <li>Gyming</li>
+                    <li>Playing Pool</li>
+                </ul>
+            </section>
+
+            <!-- Dislikes Section -->
+            <section>
+                <h2>Things I Dislike</h2>
+                <ul data-testid="test-user-dislikes">
+                    <li>Bugs in production</li>
+                    <li>Slow internet</li>
+                    <li>Carbs</li>
+                </ul>
+            </section>
+
+        </article>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
