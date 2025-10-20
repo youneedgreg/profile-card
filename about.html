@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About Gregory Odete - My journey, goals, and reflections">
+    <title>About Me - Gregory Odete</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* About Page Specific Styles */
+        .about-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        [data-testid="test-about-page"] {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .about-header h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .about-header p {
+            color: #718096;
+            font-size: 1.125rem;
+            line-height: 1.7;
+        }
+
+        .about-section {
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+        }
+
+        .about-section:nth-child(2) { animation-delay: 0.1s; }
+        .about-section:nth-child(3) { animation-delay: 0.2s; }
+        .about-section:nth-child(4) { animation-delay: 0.3s; }
+        .about-section:nth-child(5) { animation-delay: 0.4s; }
+        .about-section:nth-child(6) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            color: #4a5568;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .section-content {
+            color: #4a5568;
+            line-height: 1.8;
+            padding-left: 3rem;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Bio Section */
+        [data-testid="test-about-bio"] {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Goals Section */
+        [data-testid="test-about-goals"] {
+            list-style: none;
+            padding: 0;
+        }
+
+        [data-testid="test-about-goals"] li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        [data-testid="test-about-goals"] li::before {
+            content: '🎯';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Confidence Areas */
+        [data-testid="test-about-confidence"] {
+            background: #fff5f5;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #feb2b2;
+        }
+
+        [data-testid="test-about-confidence"] ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        [data-testid="test-about-confidence"] li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        [data-testid="test-about-confidence"] li::before {
+            content: '•';
+            color: #fc8181;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Future Note */
+        [data-testid="test-about-future-note"] {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px dashed #667eea;
+            font-style: italic;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        [data-testid="test-about-future-note"]::before {
+            content: '"';
+            font-size: 3rem;
+            color: #667eea;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            opacity: 0.3;
+        }
+
+        /* Extra Thoughts */
+        [data-testid="test-about-extra"] {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            [data-testid="test-about-page"] {
+                padding: 1.5rem;
+            }
+
+            .about-header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .section-content {
+                padding-left: 0;
+                margin-top: 1rem;
+            }
+
+            .section-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            [data-testid="test-about-page"] {
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+            }
+
+            .section-icon {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Gregory Odete</a>
+            <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link" data-page="home">Home</a></li>
+                <li><a href="about.html" class="nav-link active" data-page="about">About Me</a></li>
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="about-container">
+        <main data-testid="test-about-page">
+            <header class="about-header">
+                <h1>About Me</h1>
+                <p>My journey into software engineering and the path ahead</p>
+            </header>
+
+            <!-- Bio Section -->
+            <section class="about-section">
+                <h2 class="section-title">
+                    <span class="section-icon">👤</span>
+                    My Story
+                </h2>
+                <div class="section-content">
+                    <div data-testid="test-about-bio">
+                        <p>
+                            Hi, I'm Gregory Odete, a passionate software engineer on an exciting journey of continuous growth and innovation. 
+                            My love for technology and problem-solving drives me to create elegant solutions that make a real difference in people's lives.
+                        </p>
+                        <p>
+                            With a strong foundation in web development and a particular interest in creating accessible, user-friendly interfaces, 
+                            I believe that great software should be both powerful and intuitive. Every project I work on is an opportunity to push 
+                            boundaries and learn something new.
+                        </p>
+                        <p>
+                            When I'm not coding, you'll find me at the gym, playing pool, or diving into a good book. I believe in maintaining 
+                            a balanced lifestyle that keeps both mind and body sharp. My approach to software development is influenced by this 
+                            holistic perspective - it's not just about writing code, it's about creating experiences that truly matter.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Goals Section -->
+            <section class="about-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🎯</span>
+                    My Goals in This Program
+                </h2>
+                <div class="section-content">
+                    <ul data-testid="test-about-goals">
+                        <li>Master advanced JavaScript patterns and modern frameworks to build scalable, production-ready applications</li>
+                        <li>Develop expertise in full-stack development, bridging the gap between frontend elegance and backend robustness</li>
+                        <li>Build a portfolio of innovative projects that showcase both technical skill and creative problem-solving</li>
+                        <li>Contribute meaningfully to open-source projects and collaborate with developers worldwide</li>
+                        <li>Gain proficiency in cloud technologies and DevOps practices for modern deployment strategies</li>
+                        <li>Strengthen my understanding of software architecture and design patterns</li>
+                        <li>Network with industry professionals and build lasting relationships in the tech community</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Low Confidence Areas -->
+            <section class="about-section">
+                <h2 class="section-title">
+                    <span class="section-icon">💭</span>
+                    Areas Where I'm Building Confidence
+                </h2>
+                <div class="section-content">
+                    <div data-testid="test-about-confidence">
+                        <p>
+                            Honesty about areas for improvement is crucial for growth. Here are the skills I'm actively working to strengthen:
+                        </p>
+                        <ul>
+                            <li>Advanced system design and microservices architecture</li>
+                            <li>Complex algorithm optimization and computational complexity analysis</li>
+                            <li>Machine learning integration in web applications</li>
+                            <li>Advanced database optimization and NoSQL at scale</li>
+                            <li>Security best practices and penetration testing</li>
+                            <li>Real-time application development with WebSockets and WebRTC</li>
+                        </ul>
+                        <p>
+                            Each of these areas represents an exciting frontier for me to explore and master.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Note to Future Self -->
+            <section class="about-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📝</span>
+                    Note to My Future Self
+                </h2>
+                <div class="section-content">
+                    <div data-testid="test-about-future-note">
+                        <p>
+                            Hey Future Gregory! Remember this moment - October 2025, when you took that leap of faith into this program. 
+                            Remember the late nights debugging, the excitement of solving complex problems, and the satisfaction of seeing 
+                            your code come to life.
+                        </p>
+                        <p>
+                            Never forget why you started: the desire to build things that matter, to solve real problems, and to be part of 
+                            something bigger than yourself. The gym taught you discipline, pool taught you strategy, and reading taught you 
+                            perspective - apply all these lessons to your code.
+                        </p>
+                        <p>
+                            Stay hungry, stay humble, and never stop learning. The bugs will be many, the coffee will be strong, but the 
+                            journey will be worth it. And remember - avoiding those carbs was tough, but debugging production issues at 3 AM? 
+                            That's the real challenge!
+                        </p>
+                        <p>
+                            Keep pushing forward, Greg. You've got this! 🚀
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Extra Thoughts -->
+            <section class="about-section">
+                <h2 class="section-title">
+                    <span class="section-icon">✨</span>
+                    Additional Thoughts
+                </h2>
+                <div class="section-content">
+                    <div data-testid="test-about-extra">
+                        <p>
+                            <strong>On Clean Code:</strong> I believe that code should be written for humans first, computers second. 
+                            Clean, maintainable code is not just a nice-to-have; it's a professional responsibility.
+                        </p>
+                        <p>
+                            <strong>On Collaboration:</strong> The best code I've written has always been improved by feedback from others. 
+                            I'm excited to be part of a community where knowledge sharing and mentorship are valued.
+                        </p>
+                        <p>
+                            <strong>On Innovation:</strong> Technology should solve real problems. Whether it's making interfaces more accessible 
+                            or optimizing performance for users with slow connections, every line of code should serve a purpose.
+                        </p>
+                        <p>
+                            <strong>Current Focus:</strong> Diving deep into modern web development patterns, exploring the intersection of 
+                            performance and user experience, and building projects that challenge my current skill level.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="about.js"></script>
+</body>
+</html>
