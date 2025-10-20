@@ -1,6 +1,6 @@
-# Profile Card Component
+# Profile Card Application
 
-A responsive, accessible, and interactive profile card component built with semantic HTML5, modern CSS3, and vanilla JavaScript. No frameworks, no libraries, no build tools - just pure web technologies!
+A responsive, accessible, and interactive multi-page profile application built with semantic HTML5, modern CSS3, and vanilla JavaScript. Features a profile card, contact form with validation, and an about page with reflections. No frameworks, no libraries, no build tools - just pure web technologies!
 
 ## 🌟 Live Demo
 
@@ -10,6 +10,12 @@ A responsive, accessible, and interactive profile card component built with sema
 
 ### Desktop View
 ![Desktop view](assets/Desktop.png)
+
+### About Page
+![About Page](assets/about.png)
+
+### Contact Page
+![Contact Page](assets/contact.png)
 
 ### Mobile View
 ![Mobile view](assets/Mobile.png)
@@ -47,9 +53,13 @@ A responsive, accessible, and interactive profile card component built with sema
 ```
 profile-card/
 │
-├── index.html          # Main HTML file
-├── styles.css          # Complete CSS styling
-├── script.js           # Vanilla JavaScript 
+├── index.html          # Main profile card page
+├── about.html          # About Me page with reflections
+├── contact.html        # Contact form with validation
+├── styles.css          # Complete CSS styling for all pages
+├── script.js           # Vanilla JavaScript for interactivity
+├── about.js            # JavaScript for about page animations
+├── contact.js          # JavaScript for contact form validation
 ├── README.md           # Project documentation (this file)
 │
 └── assets/             # Assets directory
@@ -87,7 +97,8 @@ profile-card/
 
 ### Manual Testing Checklist
 
-#### Required Elements
+#### Profile Card Page (index.html)
+##### Required Elements
 - [ ] Profile card container has `data-testid="test-profile-card"`
 - [ ] Name element has `data-testid="test-user-name"`
 - [ ] Bio paragraph has `data-testid="test-user-bio"`
@@ -97,7 +108,7 @@ profile-card/
 - [ ] Hobbies list has `data-testid="test-user-hobbies"`
 - [ ] Dislikes list has `data-testid="test-user-dislikes"`
 
-#### Functionality
+##### Functionality
 - [ ] Time displays current timestamp in milliseconds
 - [ ] Time value equals `Date.now()` (within reasonable delta)
 - [ ] Social links open in new tab
@@ -105,6 +116,41 @@ profile-card/
 - [ ] Avatar has alt text for accessibility
 - [ ] All interactive elements are keyboard focusable
 - [ ] Focus styles are visible when using keyboard
+
+#### Contact Page (contact.html)
+##### Required Elements
+- [ ] Full name field has `data-testid="test-contact-name"`
+- [ ] Email field has `data-testid="test-contact-email"`
+- [ ] Subject field has `data-testid="test-contact-subject"`
+- [ ] Message field has `data-testid="test-contact-message"`
+- [ ] Submit button has `data-testid="test-contact-submit"`
+- [ ] Success message has `data-testid="test-contact-success"`
+- [ ] Error messages have `data-testid="test-contact-error-<field>"`
+
+##### Functionality
+- [ ] All fields are required
+- [ ] Email validation (name@example.com format)
+- [ ] Message must be at least 10 characters
+- [ ] Form prevents invalid submissions
+- [ ] Success message shows after valid submission
+- [ ] Error messages display for invalid fields
+- [ ] Labels linked with `for` attribute
+- [ ] Error messages tied with `aria-describedby`
+- [ ] Keyboard accessible navigation
+
+#### About Page (about.html)
+##### Required Elements
+- [ ] Main wrapper has `data-testid="test-about-page"`
+- [ ] Bio section has `data-testid="test-about-bio"`
+- [ ] Goals section has `data-testid="test-about-goals"`
+- [ ] Confidence areas section has `data-testid="test-about-confidence"`
+- [ ] Future note section has `data-testid="test-about-future-note"`
+- [ ] Extra thoughts section has `data-testid="test-about-extra"`
+
+##### Functionality
+- [ ] Semantic HTML structure (main, section, h2)
+- [ ] Proper heading hierarchy
+- [ ] Keyboard accessible
 
 #### Responsive Design
 - [ ] Mobile layout works (<640px)
@@ -217,6 +263,14 @@ No license.
 - None currently reported
 
 ## 🔄 Version History
+
+- **v2.0.0** - Stage 1 release (Current)
+  - Added Contact Us page with form validation
+  - Added About Me page with reflections
+  - Multi-page navigation system
+  - Enhanced accessibility features
+  - Form validation with error handling
+  - Semantic HTML structure across all pages
 
 - **v1.0.0** - Initial release (18/10/2025)
   - All core requirements implemented
