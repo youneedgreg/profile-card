@@ -1,78 +1,20 @@
 // ===================================
 // PROFILE CARD - VANILLA JAVASCRIPT
-// No frameworks, no libraries, pure JS!
+// Updated for Stage 1 with Navigation
 // ===================================
 
-// Wrap everything in an IIFE to avoid global scope pollution
 (function() {
     'use strict';
-
-    // ===================================
-    // CONFIGURATION
-    // ===================================
-    
-    const CONFIG = {
-        timeUpdateInterval: 1000, // Update time every second (set to null to disable auto-update)
-        animationDuration: 300,   // Duration for animations in ms
-        imageMaxSize: 5242880,     // Max image size in bytes (5MB)
-        allowedImageTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
-        debugMode: true           // Set to false in production
-    };
-
-    // ===================================
-    // UTILITY FUNCTIONS
-    // ===================================
-
-    /**
-     * Safe query selector with error handling
-     * @param {string} selector - CSS selector
-     * @returns {Element|null}
-     */
-    function $(selector) {
-        try {
-            return document.querySelector(selector);
-        } catch (e) {
-            console.error(`Invalid selector: ${selector}`, e);
-            return null;
-        }
-    }
-
-    /**
-     * Safe query selector for multiple elements
-     * @param {string} selector - CSS selector
-     * @returns {NodeList}
-     */
-    function $$(selector) {
-        try {
-            return document.querySelectorAll(selector);
-        } catch (e) {
-            console.error(`Invalid selector: ${selector}`, e);
-            return [];
-        }
-    }
-
-    /**
-     * Log debug messages if debug mode is enabled
-     * @param {...any} args - Arguments to log
-     */
-    function debug(...args) {
-        if (CONFIG.debugMode) {
-            console.log('[Profile Card]', ...args);
-        }
-    }
 
     // ===================================
     // TIME MANAGEMENT
     // ===================================
 
-    /**
-     * Update the time display with current timestamp in milliseconds
-     */
     function updateTime() {
-        const timeElement = $('[data-testid="test-user-time"]');
+        const timeElement = document.querySelector('[data-testid="test-user-time"]');
         
         if (!timeElement) {
-            debug('Time element not found');
+            console.log('Time element not found');
             return;
         }
 
@@ -84,40 +26,29 @@
             const date = new Date(currentTime);
             timeElement.setAttribute('datetime', date.toISOString());
         }
-        
-        debug('Time updated:', currentTime);
     }
 
-    /**
-     * Initialize time display and auto-update
-     */
     function initializeTime() {
         // Set initial time
         updateTime();
         
-        // Set up interval if configured
-        if (CONFIG.timeUpdateInterval && CONFIG.timeUpdateInterval > 0) {
-            setInterval(updateTime, CONFIG.timeUpdateInterval);
-            debug(`Time auto-update enabled: every ${CONFIG.timeUpdateInterval}ms`);
-        }
+        // Update every second
+        setInterval(updateTime, 1000);
     }
 
     // ===================================
     // SOCIAL LINKS MANAGEMENT
     // ===================================
 
-    /**
-     * Ensure all social links have proper attributes for security and accessibility
-     */
     function initializeSocialLinks() {
-        const socialLinks = $$('[data-testid="test-user-social-links"] a');
+        const socialLinks = document.querySelectorAll('[data-testid="test-user-social-links"] a');
         
         if (socialLinks.length === 0) {
-            debug('No social links found');
+            console.log('No social links found');
             return;
         }
 
-        socialLinks.forEach((link, index) => {
+        socialLinks.forEach((link) => {
             // Ensure target="_blank" for new tab
             if (!link.hasAttribute('target')) {
                 link.setAttribute('target', '_blank');
@@ -135,180 +66,92 @@
             }
             
             link.setAttribute('rel', relValues.join(' '));
-            
-            // Add title for better accessibility if not present
-            if (!link.hasAttribute('title')) {
-                const linkText = link.textContent.trim();
-                link.setAttribute('title', `Visit my ${linkText} profile (opens in new tab)`);
+        });
+        
+        console.log(`Initialized ${socialLinks.length} social links`);
+    }
+
+    // ===================================
+    // NAVIGATION (NEW FOR STAGE 1)
+    // ===================================
+
+    function initializeNavigation() {
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', function() {
+                const isActive = navMenu.classList.contains('active');
+                navMenu.classList.toggle('active');
+                this.classList.toggle('active');
+                this.setAttribute('aria-expanded', !isActive);
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('active');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Close menu when pressing Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('active');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        // Set active page
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-link').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
             }
-            
-            // Add event listener for analytics or tracking
-            link.addEventListener('click', function(e) {
-                debug(`Social link clicked: ${link.textContent.trim()}`);
-                // You could add analytics tracking here
+        });
+    }
+
+    // ===================================
+    // LIST INTERACTIONS
+    // ===================================
+
+    function initializeListInteractions() {
+        // Add click handlers to hobbies and dislikes for fun interaction
+        const hobbies = document.querySelectorAll('[data-testid="test-user-hobbies"] li');
+        const dislikes = document.querySelectorAll('[data-testid="test-user-dislikes"] li');
+        
+        hobbies.forEach(hobby => {
+            hobby.style.cursor = 'pointer';
+            hobby.addEventListener('click', function() {
+                this.style.transform = 'scale(1.1) rotate(5deg)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
             });
         });
         
-        debug(`Initialized ${socialLinks.length} social links`);
-    }
-
-    // ===================================
-    // AVATAR MANAGEMENT
-    // ===================================
-
-    /**
-     * Handle avatar image upload and preview
-     * @param {Event} event - File input change event
-     */
-    function handleAvatarUpload(event) {
-        const file = event.target.files?.[0];
-        
-        if (!file) {
-            debug('No file selected');
-            return;
-        }
-
-        // Validate file type
-        if (!CONFIG.allowedImageTypes.includes(file.type)) {
-            alert(`Please select a valid image file. Allowed types: ${CONFIG.allowedImageTypes.join(', ')}`);
-            event.target.value = ''; // Clear the input
-            return;
-        }
-
-        // Validate file size
-        if (file.size > CONFIG.imageMaxSize) {
-            alert(`Image size must be less than ${CONFIG.imageMaxSize / 1048576}MB`);
-            event.target.value = ''; // Clear the input
-            return;
-        }
-
-        // Read and display the image
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const avatarImg = $('[data-testid="test-user-avatar"]');
-            
-            if (!avatarImg) {
-                debug('Avatar image element not found');
-                return;
-            }
-
-            // Store old image in case we need to revert
-            const oldSrc = avatarImg.src;
-            
-            // Update image source
-            avatarImg.src = e.target.result;
-            
-            // Update alt text
-            const userName = $('[data-testid="test-user-name"]')?.textContent || 'User';
-            avatarImg.alt = `Updated profile picture of ${userName}`;
-            
-            // Add loading animation
-            avatarImg.style.opacity = '0.5';
-            
-            // Simulate loading and fade in
-            setTimeout(() => {
-                avatarImg.style.transition = `opacity ${CONFIG.animationDuration}ms ease`;
-                avatarImg.style.opacity = '1';
-            }, 100);
-            
-            debug('Avatar updated successfully');
-            
-            // Save to localStorage for persistence
-            try {
-                localStorage.setItem('userAvatar', e.target.result);
-                localStorage.setItem('userAvatarTimestamp', Date.now().toString());
-            } catch (err) {
-                debug('Could not save avatar to localStorage:', err);
-            }
-        };
-        
-        reader.onerror = function() {
-            alert('Error reading file. Please try again.');
-            event.target.value = ''; // Clear the input
-        };
-        
-        reader.readAsDataURL(file);
-    }
-
-    /**
-     * Initialize avatar functionality
-     */
-    function initializeAvatar() {
-        // Check for saved avatar in localStorage
-        try {
-            const savedAvatar = localStorage.getItem('userAvatar');
-            if (savedAvatar) {
-                const avatarImg = $('[data-testid="test-user-avatar"]');
-                if (avatarImg) {
-                    avatarImg.src = savedAvatar;
-                    debug('Loaded saved avatar from localStorage');
-                }
-            }
-        } catch (err) {
-            debug('Could not load saved avatar:', err);
-        }
-
-        // Set up file upload listener if input exists
-        const uploadInput = $('#avatar-upload');
-        if (uploadInput) {
-            uploadInput.addEventListener('change', handleAvatarUpload);
-            
-            // Accept only image files
-            uploadInput.setAttribute('accept', CONFIG.allowedImageTypes.join(','));
-            
-            debug('Avatar upload initialized');
-        }
-
-        // Add click handler to avatar image (to trigger file input)
-        const avatarImg = $('[data-testid="test-user-avatar"]');
-        if (avatarImg && uploadInput) {
-            avatarImg.style.cursor = 'pointer';
-            avatarImg.addEventListener('click', () => {
-                uploadInput.click();
+        dislikes.forEach(dislike => {
+            dislike.style.cursor = 'pointer';
+            dislike.addEventListener('click', function() {
+                this.style.transform = 'scale(0.9) rotate(-5deg)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
             });
-        }
-    }
-
-    // ===================================
-    // KEYBOARD NAVIGATION
-    // ===================================
-
-    /**
-     * Enhance keyboard navigation
-     */
-    function initializeKeyboardNavigation() {
-        document.addEventListener('keydown', function(e) {
-            // Press '/' to focus on first social link (common web pattern)
-            if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-                e.preventDefault();
-                const firstLink = $('[data-testid="test-user-social-links"] a');
-                if (firstLink) {
-                    firstLink.focus();
-                    debug('Focused on first social link via keyboard shortcut');
-                }
-            }
-            
-            // Press 'Escape' to remove focus from current element
-            if (e.key === 'Escape') {
-                if (document.activeElement && document.activeElement !== document.body) {
-                    document.activeElement.blur();
-                    debug('Focus removed via Escape key');
-                }
-            }
         });
-        
-        debug('Keyboard navigation initialized');
     }
 
     // ===================================
     // DATA VALIDATION
     // ===================================
 
-    /**
-     * Validate that all required data-testid elements exist
-     * @returns {boolean} - True if all required elements exist
-     */
     function validateRequiredElements() {
         const requiredTestIds = [
             'test-profile-card',
@@ -325,7 +168,7 @@
         let allPresent = true;
         
         requiredTestIds.forEach(testId => {
-            const element = $(`[data-testid="${testId}"]`);
+            const element = document.querySelector(`[data-testid="${testId}"]`);
             results[testId] = !!element;
             if (!element) {
                 allPresent = false;
@@ -333,100 +176,34 @@
             }
         });
         
-        if (CONFIG.debugMode) {
-            console.table(results);
+        if (allPresent) {
+            console.log('✅ All required profile card elements are present');
         }
         
         return allPresent;
     }
 
-    // =========================
-    // INTERACTIVE ENHANCEMENTS 
-    // =========================
+    // ===================================
+    // KEYBOARD NAVIGATION
+    // ===================================
 
-    /**
-     * Add interactive hover effects to list items
-     */
-    function initializeListInteractions() {
-        // Add click handlers to hobbies and dislikes for fun interaction
-        const hobbies = $$('[data-testid="test-user-hobbies"] li');
-        const dislikes = $$('[data-testid="test-user-dislikes"] li');
-        
-        hobbies.forEach(hobby => {
-            hobby.style.cursor = 'pointer';
-            hobby.addEventListener('click', function() {
-                this.style.transform = 'scale(1.1) rotate(5deg)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-                debug(`Hobby clicked: ${this.textContent}`);
-            });
-        });
-        
-        dislikes.forEach(dislike => {
-            dislike.style.cursor = 'pointer';
-            dislike.addEventListener('click', function() {
-                this.style.transform = 'scale(0.9) rotate(-5deg)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-                debug(`Dislike clicked: ${this.textContent}`);
-            });
-        });
-        
-        debug('List interactions initialized');
-    }
-
-    /**
-     * Add copy-to-clipboard functionality for the timestamp
-     */
-    function initializeTimeCopy() {
-        const timeElement = $('[data-testid="test-user-time"]');
-        
-        if (!timeElement) return;
-        
-        timeElement.style.cursor = 'pointer';
-        timeElement.title = 'Click to copy timestamp';
-        
-        timeElement.addEventListener('click', function() {
-            const timestamp = this.textContent;
-            
-            // Modern clipboard API
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(timestamp).then(() => {
-                    // Visual feedback
-                    const originalText = this.textContent;
-                    this.textContent = 'Copied!';
-                    this.style.background = '#48bb78';
-                    this.style.color = 'white';
-                    
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                        this.style.background = '';
-                        this.style.color = '';
-                    }, 1000);
-                    
-                    debug('Timestamp copied to clipboard');
-                }).catch(err => {
-                    console.error('Failed to copy:', err);
-                });
-            } else {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = timestamp;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-9999px';
-                document.body.appendChild(textArea);
-                textArea.select();
-                
-                try {
-                    document.execCommand('copy');
-                    debug('Timestamp copied (fallback method)');
-                } catch (err) {
-                    console.error('Fallback copy failed:', err);
+    function initializeKeyboardShortcuts() {
+        document.addEventListener('keydown', function(e) {
+            // Press '/' to focus on first social link
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                const firstLink = document.querySelector('[data-testid="test-user-social-links"] a');
+                if (firstLink) {
+                    firstLink.focus();
                 }
-                
-                document.body.removeChild(textArea);
+            }
+            
+            // Press 'h' to go home
+            if (e.key === 'h' && e.ctrlKey === false && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                if (window.location.pathname.includes('about.html') || window.location.pathname.includes('contact.html')) {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                }
             }
         });
     }
@@ -435,38 +212,26 @@
     // MAIN INITIALIZATION
     // ===================================
 
-    /**
-     * Initialize all profile card functionality
-     */
     function init() {
-        debug('Initializing Profile Card...');
+        console.log('Initializing Profile Card (Stage 1)...');
         
         // Validate required elements
-        const isValid = validateRequiredElements();
-        if (!isValid) {
-            console.error('Profile Card: Missing required elements. Check console warnings.');
-        }
+        validateRequiredElements();
         
         // Initialize all features
         initializeTime();
         initializeSocialLinks();
-        initializeAvatar();
-        initializeKeyboardNavigation();
+        initializeNavigation(); // New for Stage 1
         initializeListInteractions();
-        initializeTimeCopy();
+        initializeKeyboardShortcuts();
         
         // Mark as initialized
-        const card = $('[data-testid="test-profile-card"]');
+        const card = document.querySelector('[data-testid="test-profile-card"]');
         if (card) {
             card.setAttribute('data-initialized', 'true');
         }
         
-        debug('Profile Card initialized successfully!');
-        
-        // Dispatch custom event for external scripts
-        document.dispatchEvent(new CustomEvent('profileCardReady', {
-            detail: { timestamp: Date.now() }
-        }));
+        console.log('Profile Card initialized successfully!');
     }
 
     // ===================================
@@ -483,20 +248,9 @@
 
     // Handle visibility change (pause/resume time updates)
     document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            debug('Page hidden - pausing updates');
-            // Could pause time updates here to save resources
-        } else {
-            debug('Page visible - resuming updates');
+        if (!document.hidden) {
             updateTime(); // Update immediately when page becomes visible
         }
     });
-
-    // Expose some functions to global scope if needed
-    window.ProfileCard = {
-        updateTime: updateTime,
-        validateElements: validateRequiredElements,
-        version: '1.0.0'
-    };
 
 })();
